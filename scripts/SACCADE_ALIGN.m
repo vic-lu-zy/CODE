@@ -1,3 +1,6 @@
+ccc
+
+load RecordingVariables
 T = Events.T.T65sac;
 I = find(~isnan(T)); % index of saccade
 T = T(I)+1000; % start time of saccade

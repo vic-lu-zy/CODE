@@ -1,14 +1,8 @@
-close all
-clear all
-clc
+function [x,tt,ex,ey] = loadTimeSeries(electrode, EM)
 
-electrode = 48
-EM = 65
 %% load data
 
-load(['LFPChan' num2str(electrode) '.mat']);
-
-
+load(sprintf('LFPChan%02d.mat',electrode));
 load('cl_eye.mat');
 load('RecordingVariables.mat')
 
