@@ -1,0 +1,16 @@
+
+load('C:\Users\vic\Dropbox\thesis\data\RecordingVariables.mat','Events')
+samp = find(~isnan(Events.T.T65sac));
+T65sac = Events.T.T65sac(samp);
+
+f = figure(1);
+
+% for i = 1:length(samp)
+for i = 1
+    load(sprintf('lfp_trial_%03d',samp(i)));
+    x = mean(LFP(33:end,T65sac(samp(i))+999+(-500:1000)));
+    [S,F,T] = lfp_spect_pmtm(x,513,20);
+    imagesc(T,F,S');
+    axis xy
+    ylim([0 50])
+end

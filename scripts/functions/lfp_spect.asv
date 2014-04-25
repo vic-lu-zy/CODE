@@ -7,12 +7,14 @@ narginchk(3,3);
 
 if electrode < 1 || electrode > 48
     error('no such electode')
+elseif electrode < 10
+    load(spti'LFPChan0' num2str(electrode) '.mat']);
 else
-    load(sprintf('LFPChan%1d',electrode));
+    load(['LFPChan' num2str(electrode) '.mat']);
 end
 
-load cl_eye
-load cl_hand
+load('D:\Documents\Dropbox\thesis\data\cl_eye.mat');
+load('D:\Documents\Dropbox\thesis\data\cl_hand.mat');
 
 switch(EM)
     case 65

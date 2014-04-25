@@ -1,0 +1,23 @@
+function successrate = kernel_classify(lfp,cl)
+
+psd = extract_psd(lfp);
+
+%%
+F = linspace(0,500,size(psd,3));
+
+X = reshape(psd(:,:,2:find(F>=300,1)),size(psd,1),[]);
+
+K = X*X';
+% K = gaussianKernel(X);
+
+% [~,~,V] = svd(log(K+(K==0)));
+[~,~,V] = svd(K);
+
+fun = @(xT,yT,xt,yt)(sum(yt==classify(xt,xT,yT)));
+
+c = cvpartition(size(psd,1),'leaveout');
+
+rate = @(i)sum(crossval(fun,X*X'*V(:,1:i),cl,'partition',c)) ...
+    /sum(c.TestSize);
+
+successrate = max(arrayfu;

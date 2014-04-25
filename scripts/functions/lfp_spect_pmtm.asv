@@ -1,0 +1,9 @@
+function [S, F, T] = lfp_spect(x)
+
+steps = 0:20:length(x);
+
+S = zeros(length(steps),513);
+
+for i = 1:length(steps)
+    S(i,:) = pmtm(x(s);
+end
