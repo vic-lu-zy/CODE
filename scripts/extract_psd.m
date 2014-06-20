@@ -1,6 +1,6 @@
 function S = extract_psd(lfp)
 
-S = zeros(size(lfp));
+S = zeros(size(lfp,1),size(lfp,2),length(pmtm(lfp(1,1,:))));
 
 for i = 1:size(lfp,1)
     for j = 1:size(lfp,2)

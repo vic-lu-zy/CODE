@@ -1,7 +1,7 @@
 % linear classification
 
 
-function [cl_val] = linearClassification(X_train, cl_train, X_val)
+function [cl_val] = linearClassification(X_val,X_train, cl_train)
 
 [C, ~, D] = unique(cl_train);
 

@@ -22,19 +22,19 @@ F = linspace(0,500,size(psd,3));
 X50 = reshape(psd(:,:,2:find(F>=50,1)),size(psd,1),[]);
 X300 = reshape(psd(:,:,2:find(F>=300,1)),size(psd,1),[]);
 % X50 = uniStd(X50,2); X300 = uniStd(X300,2);
-clear lfp psd
+% clear lfp psd
 %%
 clc
 
 rate(1,1) = lin_classify(X50,cl);
 rate(1,2) = kernel_classify(X50,cl);
 % rate(2,3) = gaussian_kernel_classify(X50,cl);
-[~, rate(2,3)] = svm_classify(X50,cl,'linear');
+[~, rate(1,3)] = svm_classify(X50,cl,'linear');
 
-rate(1,1) = lin_classify(X300,cl);
-rate(1,2) = kernel_classify(X300,cl);
+rate(2,1) = lin_classify(X300,cl);
+rate(2,2) = kernel_classify(X300,cl);
 % rate(1,3) = gaussian_kernel_classify(X300,cl);
-[~, rate(1,3)] = svm_classify(X300,cl,'linear');
+[~, rate(2,3)] = svm_classify(X300,cl,'linear');
 
 
 rate

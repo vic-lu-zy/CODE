@@ -1,4 +1,4 @@
-function successrate = kernel_classify(X,cl)
+function [successrate,result] = kernel_classify(X,cl)
 
 K = X*X';
 
@@ -6,8 +6,13 @@ K = X*X';
 
 fun = @(xT,yT,xt,yt)(sum(yt==classify(xt,xT,yT)));
 
-c = cvpartition(size(X,1),'leaveout');
+c = cvpartition(length(cl),'leaveout');
 
-rate = @(i)sum(crossval(fun,X*X'*V(:,1:i),cl,'partition',c));
+rate = @(i)sum(crossval(fun,K*V(:,1:i),cl,'partition',c));
 
-successrate = max(arrayfun(rate,30:40))/sum(c.TestSize);
+result = arrayfun(rate,5:40)/sum(c.TestSize);
+
+% plot(5:40,result)
+
+successrate = max(result);
+
