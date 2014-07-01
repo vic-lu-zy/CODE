@@ -1,0 +1,24 @@
+function extract_spectrogram_pmtm
+
+load('D:/NPL_DATA/M20140412_245/Treach');
+T = Treach + 1000;
+t_int = -500:1000;
+f_samp = 513;
+t_nop = 20;
+
+Axis.time = t_int(1)+ceil(f_samp/2):t_nop:t_int(end)-ceil(f_samp/2);
+Axis.frequency = 0:f_samp/5;
+save('D:/NPL_DATA/M20140412_245/spect_by_electrode/Axis','Axis');
+
+%%
+for ii = 1:48
+%     F = load(sprintf('~/lfp_by_channel/LFPChan%02i.mat',ii));
+    F = load(sprintf('D:/NPL_DATA/M20140412_245/lfp_by_electrode/LFPChan%02i.mat',ii));
+    LFP = extract_time_range(F.LFP.AD,T,t_int);
+    S = zeros(length(T),length(Axis.time),f_samp);
+    parfor jj = 1:length(T)
+        S(jj,:,:) = lfp_spect_pmtm(LFP(:,jj),f_samp,t_nop);
+    end
+    S100 = S(:,:,Axis.frequency+1);
+    save(sprintf('D:/NPL_DATA/M20140412_245/spect_by_electrode/Spect_Chan_%02i',ii),'S100');
+end
