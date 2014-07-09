@@ -1,4 +1,4 @@
-function TestParfor;
+function TestParfor
 
 % Example of using parfor loop.
 %
@@ -35,7 +35,7 @@ outfile = fopen(filename,'w');
 fprintf(outfile, 'CALCULATION LOG: \n\n');
 
 tic;
-for k=1:100
+for k=1:20
    Ham(:,:,k)=rand(N)+i*rand(N);
    fprintf(outfile,'Serial: Doing K-point : %3i\n', k);
    inv(Ham(:,:,k));
@@ -46,7 +46,7 @@ fprintf(outfile, 'Time serial = %12f\n', t2);
 fclose(outfile);
 
 tic;
-parfor k=1:100
+parfor k=1:20
    Ham(:,:,k)=rand(N)+i*rand(N);
    outfile = fopen(filename,'a');
    fprintf(outfile,'Parallel: Doing K-point : %3i\n', k);
