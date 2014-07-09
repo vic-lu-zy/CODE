@@ -28,14 +28,14 @@ function TestParfor
 clear all;
 
 
-N=100;
+N=4000;
 
 filename='~/output_test_parfor.txt';
 outfile = fopen(filename,'w');
 fprintf(outfile, 'CALCULATION LOG: \n\n');
 
 tic;
-for k=1:20
+for k=1:10
    Ham(:,:,k)=rand(N)+i*rand(N);
    fprintf(outfile,'Serial: Doing K-point : %3i\n', k);
    inv(Ham(:,:,k));
@@ -46,7 +46,7 @@ fprintf(outfile, 'Time serial = %12f\n', t2);
 fclose(outfile);
 
 tic;
-parfor k=1:20
+parfor k=1:10
    Ham(:,:,k)=rand(N)+i*rand(N);
    outfile = fopen(filename,'a');
    fprintf(outfile,'Parallel: Doing K-point : %3i\n', k);

@@ -39,7 +39,7 @@ clear Data
 t_int = -200:200;
 window = 64;
 noverlap = 2;
-NFFT = 128;
+NFFT = 256;
 
 LFP = extract_time_range(LFP,T,t_int);
 
