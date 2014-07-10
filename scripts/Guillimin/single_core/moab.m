@@ -15,8 +15,3 @@ classdef moab
        otherOptions = ''
    end
 end
-
-
-
-
-

@@ -2,7 +2,7 @@ classdef moab
    properties
        numberOfNodes = 1
        procsPerNode = 16
-       WallTime = '00:20:00'
+       WallTime = '00:45:00'
        % Please use metaq unless you require a specific node type
        queue = 'metaq'
        % All jobs should specify an account or RAPid
@@ -15,8 +15,3 @@ classdef moab
        otherOptions = ''
    end
 end
-
-
-
-
-
