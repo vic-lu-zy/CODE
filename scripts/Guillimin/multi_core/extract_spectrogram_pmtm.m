@@ -7,9 +7,9 @@ dir = '~/gs/';
 
 Data = load([dir 'LFP_ALL_IN_ONE']);
 
-% T = Data.Treach+1000;
-load([dir 'T65sac'])
-T = repmat(T65sac,1,48)+1000;
+T = Data.Treach+1000;
+% load([dir 'T65sac'])
+% T = repmat(T65sac,1,48)+1000;
 
 trials = ~isnan(T(:,1));
 % T = T(:);
@@ -43,5 +43,5 @@ end
 Spect = reshape(Spect(:,:,1:length(Axis.frequency)),sum(trials),48,length(Axis.time),length(Axis.frequency));
 
 %%
-save([dir sprintf('LFP_Spect_saccade_%03i_%03i',window,t_nop)],'Spect','Axis');
+save([dir sprintf('LFP_Spect_reach_%03i_%03i_pmtm',window,t_nop)],'Spect','Axis');
 

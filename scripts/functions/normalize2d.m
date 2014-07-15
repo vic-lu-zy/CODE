@@ -1,4 +1,4 @@
-function y = normalize(x,n)
+function y = normalize2d(x,n)
 
 switch n
     case 1

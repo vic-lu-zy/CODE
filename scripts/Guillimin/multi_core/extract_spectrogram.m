@@ -30,7 +30,7 @@ save([dir 'psd_by_trial_' task '/Axis'],'Axis');
 
 parfor ii = 1:length(trials)
     D = load([dir sprintf('lfp_by_trial/LFP_trial_%03i',trials(ii))],'LFP');
-    S = zeros(48,length(Axis.frequency),length(Axis.time));
+    S = zeros(48,length(Axis.frequency),length(Axis.time),'single');
     for jj = 1:48
         S(jj,:,:) = spectrogram(D.LFP(jj,T(trials(ii))+t_int),...
             window,window-noverlap,NFFT);
