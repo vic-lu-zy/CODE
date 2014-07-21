@@ -1,18 +1,17 @@
 % cd 'D:\NPL_DATA\M20140412_245';
+% 
+% cd ~/gs/
+%% Create LFP_ALL_IN_ONE
+LFP_ALL_IN_ONE = zeros(48,432,11501,'single');
 
-cd ~/gs/
-
-f = fopen('xfer_progress.txt','w');
-for ii = 1:413
-    eval(sprintf('S_trial_%02i=zeros(48,129,938,''single'');',ii));
-    for jj = 1:48
-        fprintf(f,'ii = %02i, jj = %02i\n',ii,jj);
-        load(sprintf('psd_by_electrode_reach/LFPChan%02i',jj))
-        eval(sprintf('S_trial_%02i(%i,:,:) = S(%i,:,:);',ii,jj,ii));
-    end
-    eval(sprintf('save(''Spect_by_trial_Reach'',''S_trial_%02i'',''-append'')',ii))
-    eval(sprintf('clear(''S_trial_%02i'')',ii))
-%     waitbar(ii/177,w)
+for ii = 1:48
+    load(sprintf('LFPChan%02i',ii));
+    LFP_ALL_IN_ONE(ii,:,:) = LFP.AD;
 end
-% close(w)
-close(f)
+LFP_ALL_IN_ONE = permute(LFP_ALL_IN_ONE,[2 1 3]);
+
+%% Save LFP by trials
+for ii = 1:size(LFP_ALL_IN_ONE,1)
+    LFP = squeeze(LFP_ALL_IN_ONE(ii,:,:));
+    save(sprintf('D:/NPL_DATA/M20100407_456/lfp_by_trial/LFP_trial_%03i',ii),'LFP');
+end

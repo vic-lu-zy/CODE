@@ -9,6 +9,7 @@ for i = 1:length(T)
     S(i,:) = pmtm(x(T(i)+(1:window)),[],nfft);
 end
 
+T = T+window/2;
 %% parallel
 % [xx,yy]=meshgrid(0:NW-1,T);
 % ind = xx + yy + 1;
