@@ -33,7 +33,7 @@ T = T(trials,:);
 
 LFP = reshape(Data.LFP_ALL_IN_ONE(trials,:,:),[],...
     size(Data.LFP_ALL_IN_ONE,3));
-LFP = extract_time_range(LFP,T(:),cfg.time_interval);
+LFP = extract_time_range(LFP,T,cfg.time_interval);
 
 clear Data
 
