@@ -1,50 +1,68 @@
-clear all
+function print_figure(cfg)
 
-% load LFP_Spect_pursuit_050_005_512_pmtm
-% load T66on
-load T65sac
-load Axis
-load('RecordingVariables.mat', 'Eye')
+cd(cfg.path);
 
-trials = find(~isnan(T65sac));
-% trials = 1:413;
-
-f = figure(1);
-
-Eye_x = extract_time_range(Eye.x(~isnan(T65sac),:),...
-    T65sac(~isnan(T65sac))+1000,Axis.time);
-Eye_y = extract_time_range(Eye.y(~isnan(T65sac),:),...
-    T65sac(~isnan(T65sac))+1000,Axis.time);
-
-clear Eye
-%%
-
-% w = waitbar(0);
-for i = 1:length(trials)
-    %%
-    load(sprintf('psd_trial_%03i',trials(i)))
-    S = squeeze(median(S(1:32,:,:)))';
-    S = S(2:ceil(end/5),:).*repmat((2:ceil(size(S,1)/5))',1,size(S,2));
-    figure(f)
-    subplot 211
-    imagesc(Axis.time,Axis.frequency(2:ceil(end/5)),S);
-    title(sprintf('Spectogram of Saccade trial #%03i',trials(i)),...
-        'fontsize',18)
-    ylabel('Frequency (Hz)','fontsize',14)
-    axis xy
-%     subplot 211
-%     plot(Axis.time,mean(S))
-%     axis tight
-%     title('Average Power of 0~100 Hz','fontsize',18)
-    subplot 212
-    [ax,h1,h2] = plotyy(Axis.time,[Eye_x(:,i),Eye_y(:,i)],Axis.time,mean(S));
-    set(ax(1),'ylim',[-16,16])
-    set(h1,'linewidth',2)
-    set(h2,'linewidth',2)
-%     axis tight
-    title('Position of Eyes vs. Average Power of 0~100 Hz','fontsize',18)
-    xlabel('Time w.r.t. onset (ms)','fontsize',14)
-    print(f,sprintf('C:/Users/vic/Google Drive/Thesis/Saccade_Spectrum/Trial_%03i',trials(i)),'-dpng')
-%     waitbar(i/length(trials),w)
+if strcmp(cfg.task,'Reach')
+    load([cfg.path 'Treach'])
+    T = Treach+1000;
+elseif strcmp(cfg.task,'Saccade')
+    load([cfg.path 'T65sac'])
+    T = T65sac+1000;
+elseif strcmp(cfg.task,'Pursuit')
+    load([cfg.path 'T66on'])
+    T = T66on+1000;
 end
-% close(w)
+
+trials = find(~isnan(T));
+T = T(trials);
+
+load([cfg.path 'psd_by_trial_' cfg.task '/Axis'])
+
+load Eye_traces
+
+Eye_x = extract_time_range(Eye.x(trials,:),T,cfg.time_interval);
+Eye_y = extract_time_range(Eye.y(trials,:),T,cfg.time_interval);
+
+if ~isdir([cfg.path_out cfg.task])
+    mkdir([cfg.path_out cfg.task])
+end
+
+f = figure;
+
+nFreq = find(Axis.frequency>100,1);
+
+for ii = 1:length(trials)
+    
+    load(sprintf([cfg.path 'psd_by_trial_' cfg.task ...
+        '/psd_trial_%03i'],trials(ii)))
+    load(sprintf([cfg.path 'lfp_by_trial/LFP_trial_%03i'],...
+        trials(ii)))
+    
+    %%
+    lfp = extract_time_range(mean(LFP(1:32,:)),...
+        T(ii),cfg.time_interval);
+    SS = squeeze(median(S(1:32,:,2:nFreq)));
+        
+    subplot 311
+    plot(cfg.time_interval,Eye_x(:,ii),...
+        cfg.time_interval,Eye_y(:,ii)), axis tight
+    title(sprintf('Trial #%03i',trials(ii)),'fontsize',30)
+    ylabel('Eye Trace','fontsize',16)
+    
+    subplot 312
+    plot(cfg.time_interval,lfp), axis tight
+    ylabel('LFP time series','fontsize',16)
+        
+    subplot 313
+    imagesc(Axis.time,Axis.frequency(2:nFreq),...
+        log(SS.*repmat(2:nFreq,size(SS,1),1))'), axis xy
+%     colorbar
+    
+    ylabel('Mean Power Spectrum','fontsize',16)
+    
+    xlabel('Time from onset(ms)','fontsize',16)
+    
+    print(f,[cfg.path_out cfg.task '/trial_' ...
+        num2str(trials(ii))],'-dpng')
+end
+close(f)

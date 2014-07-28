@@ -1,4 +1,4 @@
-function print_figure_eye_traces_vs_lfp_vs_spect(cfg)
+function print_figure(cfg)
 
 cd(cfg.path);
 
@@ -16,8 +16,7 @@ end
 trials = find(~isnan(T));
 T = T(trials);
 
-load([cfg.path 'psd_by_trial_' cfg.task '/Axis'])
-
+load Axis
 load Eye_traces
 
 Eye_x = extract_time_range(Eye.x(trials,:),T,cfg.time_interval);
