@@ -1,43 +1,53 @@
-function extract_spectrogram_pmtm_by_trial(task)
-%
-dir = 'D:/NPL_DATA/M20140412_245/';
+function extract_spectrogram_pmtm_by_trial(cfg)
+%%
+% extract_spectrogram_pmtm(cfg)
+% options:
+%   .path
+%   .task
+%   .time_interval
+%   .time_window
+%   .time_step
+%   .NFFT
 
-if strcmp(task,'Reach')
-    load([dir 'Treach'])
+%%
+cd(cfg.path);
+
+if strcmp(cfg.task,'Reach')
+    load([cfg.path 'Treach'])
     T = Treach+1000;
-elseif strcmp(task,'Saccade')
-    load([dir 'T65sac'])
+elseif strcmp(cfg.task,'Saccade')
+    load([cfg.path 'T65sac'])
     T = T65sac+1000;
-elseif strcmp(task,'Pursuit')
-    load([dir 'T66on'])
+elseif strcmp(cfg.task,'Pursuit')
+    load([cfg.path 'T66on'])
     T = T66on+1000;
 end
+
 %%
 trials = find(~isnan(T));
  
-t_int = -500:500;
-window = 32;
-noverlap = 5;
-NFFT = 512;
+Axis.time = cfg.time_interval(1)+cfg.time_window/2:...
+    cfg.time_step:cfg.time_interval(end)-cfg.time_window/2;
+Axis.frequency = linspace(0,500,cfg.NFFT/2+1);
 
-Axis.time = t_int(1)+window/2:noverlap:t_int(end)+1-window/2;
-Axis.frequency = linspace(0,500,NFFT/2+1);
+if ~isdir([cfg.path 'psd_by_trial_' cfg.task])
+    mkdir([cfg.path 'psd_by_trial_' cfg.task])
+end
 
-save([dir 'psd_by_trial_' task '/Axis'],'Axis');
+save([cfg.path 'psd_by_trial_' cfg.task '/Axis'],'Axis');
 
-% Spect = zeros(length(trials),ceil(length(Axis.frequency)/5),length(Axis.time));
 %%
 
 parfor ii = 1:length(trials)
     
-    D = load([dir sprintf('lfp_by_trial/LFP_trial_%03i',trials(ii))],'LFP');
+    D = load([cfg.path sprintf('lfp_by_trial/LFP_trial_%03i',trials(ii))],'LFP');
     S = zeros(48,length(Axis.time),length(Axis.frequency),'single');
     for jj = 1:48
-        S(jj,:,:) = lfp_spect_pmtm(D.LFP(jj,T(trials(ii))+t_int),...
-            window,noverlap,NFFT);
+        S(jj,:,:) = lfp_spect_pmtm(D.LFP(jj,T(trials(ii))+cfg.time_interval),...
+            cfg.time_window,cfg.time_step,cfg.NFFT);
     end
-    parsave([dir 'psd_by_trial_' task '/psd_trial_'],S,trials(ii));
+    parsave([cfg.path 'psd_by_trial_' cfg.task '/psd_trial_'],S,trials(ii));
     
 end
 
-save([dir 'psd_by_trial_' task '/Spect'],'Spect');
+% save([dir 'psd_by_trial_' cfg.task '/Spect'],'Spect');

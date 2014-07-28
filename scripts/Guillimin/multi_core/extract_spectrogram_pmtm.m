@@ -1,7 +1,7 @@
 function extract_spectrogram_pmtm(cfg)
 
 %%
-% extract_spectrogram_pmtm(dir,task,options)
+% extract_spectrogram_pmtm(cfg)
 % options:
 %   .path
 %   .task
@@ -11,19 +11,17 @@ function extract_spectrogram_pmtm(cfg)
 %   .NFFT
 
 %%
-dir = cfg.path;
-task = cfg.task;
 
-Data = load([dir 'LFP_ALL_IN_ONE']);
+Data = load([cfg.path 'LFP_ALL_IN_ONE']);
 
-if strcmp(task,'Saccade')
-    load([dir 'T65sac'])
+if strcmp(cfg.task,'Saccade')
+    load([cfg.path 'T65sac'])
     T = repmat(T65sac,1,48)+1000;
-elseif strcmp(task,'Pursuit')
-    load([dir 'T66on'])
+elseif strcmp(cfg.task,'Pursuit')
+    load([cfg.path 'T66on'])
     T = repmat(T66on,1,48)+1000;
-elseif strcmp(task,'Reach')
-    load([dir 'Treach'])
+elseif strcmp(cfg.task,'Reach')
+    load([cfg.path 'Treach'])
     T = repmat(Treach,1,48)+1000;
 end
 
@@ -55,8 +53,8 @@ end
 Spect = reshape(Spect(:,:,1:length(Axis.frequency)),sum(trials),48,...
     length(Axis.time),length(Axis.frequency));
 
-save([dir sprintf('LFP_Spect_%s_%03i_%03i_%03i_pmtm',...
-    task,cfg.time_window,cfg.time_step,cfg.NFFT)],'Spect','Axis');
+save([cfg.path sprintf('LFP_Spect_%s_%03i_%03i_%03i_pmtm',...
+    cfg.task,cfg.time_window,cfg.time_step,cfg.NFFT)],'Spect','Axis');
 
 end
 
