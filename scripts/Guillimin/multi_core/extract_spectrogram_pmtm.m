@@ -36,7 +36,7 @@ LFP = extract_time_range(LFP,T(:),cfg.time_interval);
 clear Data
 
 %%
-Axis.time = cfg.time_interval(1)+cfg.time_window/2:...
+Axis.time = cfg.time_interval(1)+cfg.time_window/2-1:...
     cfg.time_step:cfg.time_interval(end)-cfg.time_window/2;
 Axis.frequency = linspace(0,500,cfg.NFFT/2+1);
 Axis.frequency = Axis.frequency(Axis.frequency<100);

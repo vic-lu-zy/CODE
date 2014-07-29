@@ -5,24 +5,26 @@ f = figure;
 dir = 'C:/Users/vic/Google Drive/Thesis/figures/20100412/Saccade/';
 
 for ii = 1:length(trials)
-    for jj = 1:48
-        subplot 211
-        plot(-500:500,Eye_x(:,ii),-500:500,Eye_y(:,ii));
-        s
+    for jj = 0:3
         
-%         
-%         for kk = 1:16
-%             
-%             %%
-%             subplot(4,4,kk)
-%             imagesc(Axis.time,Axis.frequency,...
-%                 squeeze(Spect(ii,(jj-1)*16+kk,:,:))'...
-%                 .*repmat(1:52,size(Spect,3),1)');
-%             axis xy off
-%             title(sprintf('Channel #%02i',(jj-1)*16+kk))
-%         end
+        if ~jj
+            subplot 111
+            plot(-500:500,Eye_x(:,ii),'linewidth',4, ...
+                -500:500,Eye_y(:,ii),'linewidth',4)
+        else
+            for kk = 1:16
+                
+                %%
+                subplot(4,4,kk)
+                imagesc(Axis.time,Axis.frequency,...
+                    squeeze(Spect(ii,(jj-1)*16+kk,:,:))'...
+                    .*repmat(1:52,size(Spect,3),1)');
+                axis xy off
+                title(sprintf('Channel #%02i',(jj-1)*16+kk))
+            end
+        end
         
-        print(f,sprintf([dir 'Trial_#%03i_%i'],...
+        print(f,sprintf([dir num2str(cl(ii)) '/Trial_#%03i_%i'],...
             trials(ii),jj),'-dpng');
     end
 end
