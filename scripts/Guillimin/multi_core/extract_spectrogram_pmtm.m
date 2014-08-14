@@ -39,7 +39,7 @@ clear Data
 Axis.time = cfg.time_interval(1)+cfg.time_window/2-1:...
     cfg.time_step:cfg.time_interval(end)-cfg.time_window/2;
 Axis.frequency = linspace(0,500,cfg.NFFT/2+1);
-Axis.frequency = Axis.frequency(Axis.frequency<100);
+Axis.frequency = Axis.frequency(Axis.frequency<150);
 
 
 %%

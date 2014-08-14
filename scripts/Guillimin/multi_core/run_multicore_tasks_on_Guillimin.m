@@ -13,7 +13,7 @@ options.task = 'Saccade';
 % options.task = 'Pursuit';
 
 options.time_interval   = -500:500;
-options.time_window     = 256;
+options.time_window     = 32;
 options.time_step       = 5;
 options.NFFT            = 512;
 
