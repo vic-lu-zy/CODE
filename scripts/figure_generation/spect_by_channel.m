@@ -1,4 +1,4 @@
-function by_channel(f,cfg)
+function spect_by_channel(f,cfg)
 
 for i = 1:length(cfg.path_data)
     load(cfg.path_data{i});
