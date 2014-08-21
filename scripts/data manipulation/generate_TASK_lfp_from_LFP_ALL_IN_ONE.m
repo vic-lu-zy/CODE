@@ -2,16 +2,38 @@ ccc
 
 load LFP_ALL_IN_ONE;
 
+tic
+
 load T65sac
+T = repmat(T65sac,1,48)+1000;
+trials = ~isnan(T(:,1));
+T = T(trials,:);
+
+LFP = reshape(LFP_ALL_IN_ONE(trials,:,:),[],size(LFP_ALL_IN_ONE,3));
+
+LFP_ALL_IN_ONE_SACCADE = extract_time_range(LFP,T(:),-500:1000);
+LFP_ALL_IN_ONE_SACCADE = reshape(LFP_ALL_IN_ONE_SACCADE,1501,[],48);
+LFP_ALL_IN_ONE_SACCADE = permute(LFP_ALL_IN_ONE_SACCADE,[3 2 1]);
+
 load T66on
+T = repmat(T66on,1,48)+1000;
+trials = ~isnan(T(:,1)); 
+T = T(trials,:);
+
+LFP = reshape(LFP_ALL_IN_ONE(trials,:,:),[],size(LFP_ALL_IN_ONE,3));
+
+LFP_ALL_IN_ONE_PURSUIT = extract_time_range(LFP,T(:),-500:2000);
+LFP_ALL_IN_ONE_PURSUIT = reshape(LFP_ALL_IN_ONE_PURSUIT,2501,[],48);
+LFP_ALL_IN_ONE_PURSUIT = permute(LFP_ALL_IN_ONE_PURSUIT,[3 2 1]);
+
 load Treach
+T = repmat(Treach,1,48)+1000;
+trials = ~isnan(T(:,1));
+T = T(trials,:);
 
-LFP_ALL_IN_ONE_SACCADE = zeros(48,sum(~isnan(T65sac)),1501);
-% LFP_ALL_IN_ONE_PURSUIT = zeros(48,sum(~isnan(T66on)),2501);
-% LFP_ALL_IN_ONE_REACH = zeros(48,sum(~isnan(Treach)),1501);
+LFP = reshape(LFP_ALL_IN_ONE(trials,:,:),[],size(LFP_ALL_IN_ONE,3));
 
-for ii = 1:48
-    LFP_ALL_IN_ONE_SACCADE(ii,:,:) = extract_time_range(LFP_ALL_IN_ONE(:,ii,:),T65sac+1000,-500:1000)';
-%     LFP_ALL_IN_ONE_PURSUIT(ii,:,:) = extract_time_range(LFP_ALL_IN_ONE(:,ii,:),T66on+1000,-500:2000)';
-%     LFP_ALL_IN_ONE_REACH(ii,:,:) = extract_time_range(LFP_ALL_IN_ONE(:,ii,:),Treach+1000,-500:500)';    
-end
+LFP_ALL_IN_ONE_REACH = extract_time_range(LFP,T(:),-500:1000);
+LFP_ALL_IN_ONE_REACH = reshape(LFP_ALL_IN_ONE_REACH,1501,[],48);
+LFP_ALL_IN_ONE_REACH = permute(LFP_ALL_IN_ONE_REACH,[3 2 1]);
+toc
