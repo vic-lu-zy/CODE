@@ -3,16 +3,17 @@ params.tapers = [2 3];
 params.fpass = [0 50];
 movingwin = [.3 .03];
 
+%%
 % path_out = 'C:/Users/vic/Dropbox/thesis/figures/20100412/Spect/Saccade/';
 % load('LFP_ALL_IN_ONE','LFP_ALL_IN_ONE_SACCADE')
 % LFP_ALL_IN_ONE_SACCADE = double(LFP_ALL_IN_ONE_SACCADE);
 % load cl65
-
-path_out = 'C:/Users/vic/Dropbox/thesis/figures/20100412/Spect/Reach/';
-load('LFP_ALL_IN_ONE','LFP_ALL_IN_ONE_REACH')
-LFP_ALL_IN_ONE_REACH = double(LFP_ALL_IN_ONE_REACH);
-load cl_hand
-cl = h;
+% 
+% path_out = 'C:/Users/vic/Dropbox/thesis/figures/20100412/Spect/Reach/';
+% load('LFP_ALL_IN_ONE','LFP_ALL_IN_ONE_REACH')
+% LFP_ALL_IN_ONE_REACH = double(LFP_ALL_IN_ONE_REACH);
+% load cl_hand
+% cl = h;
 
 for ii = 1:4
     numb_trials(ii) = sum(cl==ii);
