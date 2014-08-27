@@ -2,7 +2,7 @@ ccc
 
 load LFP_ALL_IN_ONE;
 
-to_do = [0,0,1,0];
+to_do = [1,0,1,0];
 %% saccade
 if to_do(1)
     load T65sac
@@ -34,13 +34,13 @@ end
 %% fixation
 if to_do(3)
     load T67
-    T = repmat(T67_start,1,48)+1000;
+    T = repmat(T67_start,1,48);
     trials = ~isnan(T(:,1));
     T = T(trials,:);
     
     LFP = reshape(LFP_ALL_IN_ONE(trials,:,:),[],size(LFP_ALL_IN_ONE,3));
     
-    t_int = -500:500;
+    t_int = -200:1000;
     LFP_ALL_IN_ONE_FIXATION = extract_time_range(LFP,T(:),t_int);
     LFP_ALL_IN_ONE_FIXATION = reshape(LFP_ALL_IN_ONE_FIXATION,length(t_int),[],48);
     LFP_ALL_IN_ONE_FIXATION = permute(LFP_ALL_IN_ONE_FIXATION,[3 2 1]);
