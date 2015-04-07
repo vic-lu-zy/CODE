@@ -12,23 +12,21 @@ saccadetimes=nan;
 if isnan(t)
   return
 end
+
 t=t+1000; %analog eye starts at -1000
 
-if size(eyeX,1)==1 && size(eyeX,2)>1
-  eyeX=eyeX';
-end
-if size(eyeY,1)==1 && size(eyeY,2)>1
-  eyeY=eyeY';
-end
+eyeX = eyeX(:);
+eyeY = eyeY(:);
 
-speed=[(smooth(diff(eyeX(t:end)),5)) (smooth(diff(eyeY(t:end)),5))];
-speed=sqrt(speed(:,1).^2+speed(:,2).^2); %combine x and y velocities
-saccadetimes=findSequential(find(speed>.08),10,2);
-saccadetimes=saccadetimes+t*ones(size(saccadetimes))-1000;
+speed = sqrt((smooth(diff(eyeX(t:end)),5)).^2 + (smooth(diff(eyeY(t:end)),5)).^2);
+
+saccadetimes = findSequential(find(speed>.08),10,2);
+
+saccadetimes = saccadetimes+t*ones(size(saccadetimes))-1000;
 
 
 
-function ind=findSequential(inp,N,wiggle)
+function ind = findSequential(inp,N,wiggle)
 %In input 'inp' find N sequential points (i.e. separated by 1 index),
 %allowing for 'wiggle' points to be out. 'inp' is integer indices. Returns
 %the first index in the found series.
