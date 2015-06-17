@@ -1,5 +1,5 @@
 
-[X,Y] = getXY(Spect(:,:,13:29,1:2:end),cl,[1,2,3,4]);
+[X,Y] = getXY(Spect(:,:,13:29,:),cl,[1,3]);
 
 [~,X] = pca(X,'NumComponents',10);
 

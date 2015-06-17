@@ -1,2 +1,0 @@
-function cl = getLabel(eye)
-
