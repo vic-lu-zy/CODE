@@ -1,6 +1,9 @@
 function yt = LogisticRegression(xt,xT,yT,lambda)
 
 % theta = LRClassifier(xT, yT, length(unique(yT)), lambda);
+if nargin<4
+    lambda = 0.1;
+end
 
 m = size(xT, 1); % number of examples
 n = size(xT, 2); % how many parameters (features)
