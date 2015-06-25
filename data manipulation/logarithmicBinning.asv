@@ -1,0 +1,25 @@
+freq = Axis{2}.frequency(:);
+
+fspace = logspace(0,log10(500),20)';
+fspace(1)=0;
+
+[~, binidx] = histc(freq,fspace);
+binidx(~binidx) = binidx(find(~binidx)-1);
+n = max(bini
+
+ss = size(S);
+means = zeros([ss(1:3),max(binidx)]);
+
+tic
+for ii = 1:max(binidx)
+    for jj = 1:177
+%         S = squeeze(Spect{2}(ii,jj,:,:));
+        for kk = 1:101
+            means(ii,jj,kk,:) = accumarray(binidx, squeeze(S(ii,jj,kk,:)), [], @mean);
+        end
+    end
+    waitbar(ii/48,w)
+end
+toc
+% 
+save('S:/Dropbox/logBin','means')

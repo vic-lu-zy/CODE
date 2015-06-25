@@ -1,9 +1,20 @@
-[S,freq] = pmtm(x,2.5,256,1000);
-fspace = logspace(0,log10(500),20); 
+freq = Axis{2}.frequency(:);
+
+fspace = logspace(0,log10(500),20)';
 fspace(1)=0;
 
 [~, binidx] = histc(freq,fspace);
-binidx(end)=binidx(end-1);
-means = accumarray(binidx, S, [], @mean);
+binidx(~binidx) = binidx(find(~binidx)-1);
+n = max(binidx);
 
-loglog(freq,S,fspace(1:end-1),means)
+ss = size(S);
+means = zeros([ss(1:3),n]);
+
+tic
+for ii = 1:n
+    if any(binidx==ii)
+        means(:,:,:,ii) = mean(S(:,:,:,binidx==ii),4);
+    end
+end
+toc
+%

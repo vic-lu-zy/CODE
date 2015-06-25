@@ -22,7 +22,11 @@ for j=1:size(TestSet,1)
     
     for k=1:size(C,1)
         
-        pred = model{k}.predict(TestSet(j,:));
+        if isempty(numOfFeatures)
+            pred = model{k}.predict(TestSet(j,:));
+        else
+            pred = model{k}.predict(TestSet(j,reducedFeatures{k}));
+        end
         
         if pred
             result(j,C(k,1))=result(j,C(k,1))+1;
