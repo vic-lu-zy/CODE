@@ -1,11 +1,15 @@
-function [X, Y] = getXY(X,cl,dir)
+function [X, Y] = getXY(X,cl,direction)
 
 h = hist(cl,4);
 trials = [];
-n = min(h(dir));
-for ii = dir
+n = min(h(direction));
+for ii = direction
     trials = [trials; randsample(find(cl==ii),n)];
 end
+
+% random permutate the trials
+ind = randperm(length(trials),length(trials));
+trials = trials(ind);
 %%
 X = X(:,trials,:,:);
 X = normalize2d(X,2);

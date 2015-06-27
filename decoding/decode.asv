@@ -1,5 +1,3 @@
-clc
-
 trials = (cl==1 | cl==3);
 
 X = SpectBinned{2}(1,trials,13:29,:);
@@ -23,13 +21,12 @@ for method = 1:4
 %             t = templateNaiveBayes(); %too long !!
     end
     
-    fprintf('Processing %5s, it took ... ',methods{method})
+    fprintf('Processing %s',methods(me)
     Mdl = fitcecoc(X,Y,'Learners',t);
     tic
     CVMdl = crossval(Mdl,'leaveout','on');
     rate(method) = 1-kfoldLoss(CVMdl);
     time(method) = toc;
-    fprintf('%5.2f s, with a rate of %5.2f.\n',time(method),rate(method))
 end
 %%
 

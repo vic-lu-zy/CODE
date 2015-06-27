@@ -1,4 +1,4 @@
-function result = multisvm_hybrid(TestSet,TrainingSet,GroupTrain,numOfFeatures)
+function result = multisvm_hybrid(TestSet,TrainingSet,GroupTrain)
 
 switch length(unique(GroupTrain))
     
@@ -16,4 +16,4 @@ switch length(unique(GroupTrain))
         
 end
 
-result = fun(TestSet,TrainingSet,GroupTrain,numOfFeatures);
+result = fun(TestSet,TrainingSet,GroupTrain);

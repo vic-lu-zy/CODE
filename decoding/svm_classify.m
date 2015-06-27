@@ -1,4 +1,4 @@
-function [rate,result] = svm_classify(X,Y,numOfFeatures)
+function [rate,result] = svm_classify(X,Y)
 
 % [rate,result] = SVM_CLASSIFY(X,cl,numOfFeatures)
 % rate              = correct/all (%)
@@ -9,7 +9,7 @@ function [rate,result] = svm_classify(X,Y,numOfFeatures)
 %                   ranked by separability
 %% crossval
 c = cvpartition(size(X,1),'leaveout');
-fun = @(xT,yT,xt,yt)(sum(yt==multisvm_hybrid(xt,xT,yT,numOfFeatures)));
+fun = @(xT,yT,xt,yt)(sum(yt==multisvm_hybrid(xt,xT,yT)));
 result = crossval(fun,X,Y,'partition',c)>0;
 rate = sum(result)/sum(c.TestSize);
 

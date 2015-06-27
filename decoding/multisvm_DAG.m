@@ -1,4 +1,4 @@
-function [result] = multisvm_DAG(TestSet,TrainingSet,GroupTrain,numOfFeatures)
+function [result] = multisvm_DAG(TestSet,TrainingSet,GroupTrain)
 
 u = unique(GroupTrain);
 C = nchoosek(u,2); % coeff matrix for one-to-one comparison
@@ -12,17 +12,9 @@ for ii = 1:size(C,1)
     
     ind = GroupTrain==C(ii,1) | GroupTrain==C(ii,2);
     Y = GroupTrain(ind) == C(ii,1);
-    if isempty(numOfFeatures)
-        X = TrainingSet(ind,:);
-        model = fitcsvm(X,Y);
-        interm(:,ii) = model.predict(TestSet);
-    else
-        reducedFeatures = rankfeatures(TrainingSet(ind,:)',...
-            Y,'NumberOfIndices',numOfFeatures);
-        X = TrainingSet(ind,reducedFeatures);
-        model = fitcsvm(X,Y);
-        interm(:,ii) = model.predict(TestSet(:,reducedFeatures));
-    end
+    X = TrainingSet(ind,:);
+    model = fitcsvm(X,Y);
+    interm(:,ii) = model.predict(TestSet);
     
 end
 
