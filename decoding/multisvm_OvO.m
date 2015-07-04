@@ -7,12 +7,14 @@ result = zeros(size(TestSet,1),max(u));
 
 %% build models
 
+models = cell(size(C,1),1);
+
 for ii = 1:size(C,1)
     
     ind = GroupTrain==C(ii,1) | GroupTrain==C(ii,2);
     Y = GroupTrain(ind) == C(ii,1);
     X = TrainingSet(ind,:);
-    model{ii} = fitcsvm(X,Y);
+    models{ii} = fitcsvm(X,Y);
     
 end
 
@@ -22,7 +24,7 @@ for j=1:size(TestSet,1)
     
     for k=1:size(C,1)
         
-        pred = model{k}.predict(TestSet(j,:));
+        pred = models{k}.predict(TestSet(j,:));
         
         if pred
             result(j,C(k,1))=result(j,C(k,1))+1;
