@@ -1,7 +1,8 @@
 function generate_TASK_lfp_from_LFP_ALL_IN_ONE
 % ccc
 
-to_do = [1,1,1,1]; %sac,pur,fix,reach
+% to_do = [1,1,1,1]; %sac,pur,fix,reach
+to_do = 2;
 
 if exist([pwd '/LFP_ALL_IN_ONE.mat'],'file')
     load LFP_ALL_IN_ONE;
@@ -24,8 +25,8 @@ if ~exist('LFP','var')
 end
 
 task_timing = {[],-500:1000,-500:2500,-500:1000,-500:1000};
-
-for task = 2:5
+%%
+for task = to_do
     switch task
         case 2
             load T65sac

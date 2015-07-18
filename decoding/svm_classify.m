@@ -8,6 +8,8 @@ function [rate,result] = svm_classify(X,Y)
 % numOfFeatures     = numbers of features to use in decoding, 
 %                   ranked by separability
 %% crossval
+
+X = bsxfun(@rdivide,X,std(X,[],2));
 c = cvpartition(size(X,1),'leaveout');
 fun = @(xT,yT,xt,yt)(sum(yt==multisvm_hybrid(xt,xT,yT)));
 result = crossval(fun,X,Y,'partition',c)>0;

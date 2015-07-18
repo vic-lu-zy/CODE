@@ -1,12 +1,10 @@
-function [LogBin, Spect, Axis] = extract_spectrogram_chronux(lfp,task_timing,movingwin)
+function [LogBin, Spect, Axis] = ...
+    extract_spectrogram_chronux(lfp,task_timing,movingwin,tapers)
 
 params.Fs = 1000;
-params.tapers = [2 3];
+params.tapers = tapers;
 params.fpass = [0 500];
-
-if nargin == 2
-    movingwin = [.35 .02];
-end
+% movingwin = [.35 .02];
 
 fspace = logspace(0,log10(500),20)';
 fspace(1)=0;
@@ -15,18 +13,18 @@ ss = size(lfp);
 %%
 lfp = reshape(lfp,[],size(lfp,3));
 
-[Spect,Axis.time,Axis.freq] = ...
+[~,Axis.time,Axis.freq] = ...
     mtspecgramc(lfp(1,:),movingwin,params);
 
-Axis.time = Axis.time+(task_timing(1)/1000);
+Axis.time = Axis.time'+(task_timing(1)/1000);
 
 [~, binidx] = histc(Axis.freq(:),fspace);
 binidx(~binidx) = binidx(find(~binidx)-1);
 n = max(binidx);
 %% calculate pmtm
-tic
+% tic
 Spect = single(mtspecgramc(lfp',movingwin,params));
-toc
+% toc
 
 Spect = reshape(Spect,size(Spect,1),size(Spect,2),ss(1),[]);
 Spect = permute(Spect,[3 4 1 2]);
@@ -43,5 +41,10 @@ for ii = 1:n
     end
 end
 
-LogBin(:,:,:,~LogBin(1,1,1,:))=[]; % removes zero'd dimensions
+%%
+emptyFreq = squeeze(~LogBin(1,1,1,:));
+LogBin(:,:,:,emptyFreq)=[]; % removes zero'd dimensions
+fspace(end) = [];
+fspace(emptyFreq) = [];
 
+Axis.freq = fspace;

@@ -2,7 +2,7 @@ clc
 
 trials = (cl==1 | cl==3);
 
-X = SpectBinned{2}(1,trials,13:29,:);
+X = SpectBinned{2}(17,trials,13:29,:);
 X = permute(X,[2 1 3 4]);
 X = reshape(X,size(X,1),[]);
 Y = cl(trials);

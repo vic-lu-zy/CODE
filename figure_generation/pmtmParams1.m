@@ -8,7 +8,7 @@ mw = linspace(.01,.03,21);
 for ii = 1:length(ww)
     for jj = 1:length(mw)
         movingwin = [ww(ii) mw(jj)];
-        [logBins, Axis] = ...
+        [logBins, ~, Axis] = ...
             extract_spectrogram_chronux(lfp,task_timing,movingwin);
         t1 = find(Axis.time>-.1,1);
         t2 = find(Axis.time>.3,1)-1;

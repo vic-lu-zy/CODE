@@ -1,47 +1,58 @@
 % decoding rate vs (time,freq)
 
-data = SpectBinned{2};
+% data = SpectBinned{2};
+[logBins, ~ , Axis] = ...
+    extract_spectrogram_chronux(lfp,task_timing,[.3 .03],[1 1]);
 
-timeN = size(data,3);
-freqN = size(data,4);
+timeN = size(logBins,3);
+freqN = size(logBins,4);
 direction = [1 3];
 
-h = hist(cl,4);
-trials = [];
-n = min(h(direction));
-for ii = direction
-    trials = [trials; randsample(find(cl==ii),n)];
-end
-
-% random permutate the trials
-ind = randperm(length(trials),length(trials));
-trials = trials(ind);
-
-X = data(1,trials,:,:);
-X = normalize2d(X,2);
-X = permute(X,[2 1 3 4]);
-Y = cl(trials);
+[X,Y] = getXY(logBins(1,:,:,:),cl,[1 3],0);
 
 %%
 [start,finish] = meshgrid(1:timeN);
 valid = finish >= start;
 start = start(valid);
 finish = finish(valid);
-thisRate = start;
-parfor ii = 1:length(start)
-        thisX = reshape(X(:,:,start(ii):finish(ii),:),size(X,1),[]);
-        thisRate(ii) = svm_classify(thisX,Y);
+thisRate = nan(size(start));
+
+for ii = 1:length(start)
+%     thisX = reshape(X(:,:,start(ii):finish(ii),:),size(X,1),[]);
+    [thisX,~] = getXY(logBins(1,:,start(ii):finish(ii),:),cl,direction,0);
+    thisRate(ii) = svm_classify(thisX,Y);
+    waitbar(ii/length(start))
 end
+
 rate.time = nan(timeN);
 rate.time((start-1)*timeN+finish) = thisRate;
+
 %%
-rate.freq = nan(freqN);
-fig = imagesc(Axis{2}.freq,Axis{2}.freq,rate.freq); axis xy, colorbar
-for freqStart = 1:freqN
-    for freqEnd = freqStart:freqN
-        thisX = reshape(X(:,:,13:29,freqStart:freqEnd),size(X,1),[]);
-        rate.freq(freqStart,freqEnd) = svm_classify(thisX,Y);
-        fig.CData = rate.freq;
-        drawnow
-    end
+
+[start,finish] = meshgrid(1:freqN);
+valid = finish >= start;
+start = start(valid);
+finish = finish(valid);
+thisRate = nan(size(start));
+t1 = find(Axis.time>-.1,1);
+t2 = find(Axis.time>.3,1)-1;
+
+for ii = 1:length(start)
+%     thisX = reshape(X(:,:,start(ii):finish(ii),:),size(X,1),[]);
+    [thisX,~] = getXY(logBins(1,:,t1:t2,start(ii):finish(ii)),cl,direction,0);
+    thisRate(ii) = svm_classify(thisX,Y);
+    waitbar(ii/length(start))
 end
+
+rate.freq = nan(timeN);
+rate.freq((start-1)*timeN+finish) = thisRate;
+
+%%
+subplot 121
+imagesc(Axis.time,Axis.time,rate.time)
+axis image xy
+colorbar
+subplot 122
+imagesc(Axis.freq,Axis.freq,rate.freq)
+axis image xy
+colorbar
