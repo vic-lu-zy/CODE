@@ -1,3 +1,3 @@
 clear
-clf
+close all
 clc

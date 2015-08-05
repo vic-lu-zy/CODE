@@ -1,9 +1,10 @@
-function [X, Y] = getXY(X,cl,direction,redist)
+function [X, Y, trials] = getXY(X,cl,direction,redist)
 
 if redist
     h = hist(cl,4);
     trials = [];
     n = min(h(direction));
+%     n = min(floor(120/length(direction)),n);
     for ii = direction
         trials = [trials; randsample(find(cl==ii),n)];
     end
@@ -13,9 +14,9 @@ end
 
 %%
 X = X(:,trials,:,:);
-% X = normalize2d(X,2);
 X = permute(X,[2 1 3 4]);
 % X = permute(X,[2 1 3]);
 X = reshape(X,size(X,1),[]);
 X = single(X);
+X = normalize2d(X,1);
 Y = cl(trials);
